@@ -3,7 +3,6 @@ import MenuItem from "./MenuItem";
 import { AiFillHome } from "react-icons/ai";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import Link from "next/link";
-import ThemeSwitch from "./ThemeSwitch";
 
 export default function Header() {
   return (
@@ -17,7 +16,6 @@ export default function Header() {
         ></MenuItem>
       </div>
       <div className="flex items-center gap-4">
-        <ThemeSwitch />
         <Link href={"/"} className="flex gap-1 items-center">
           <div className="">
             <span className="text-2xl font-bold bg-red-800 py-1 px-2 rounded-lg">
