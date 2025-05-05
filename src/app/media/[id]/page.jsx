@@ -1,8 +1,9 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { MdStar } from "react-icons/md";
 
-export default async function MoviePage({ params, searchParams }) {
+export default async function MediaPage({ params, searchParams }) {
   const id = params.id;
 
   // get media type from url query parameter
@@ -152,7 +153,11 @@ export default async function MoviePage({ params, searchParams }) {
               <h3 className="font-bold text-lg mb-2">Top Cast</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {cast.map((actor) => (
-                  <div key={actor.id} className="flex items-center">
+                  <Link
+                    href={`/credits/${actor.id}`}
+                    key={actor.id}
+                    className="flex items-center cursor-pointer hover:bg-gray-800 p-1 rounded"
+                  >
                     {actor.profile_path ? (
                       <Image
                         src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
@@ -170,7 +175,7 @@ export default async function MoviePage({ params, searchParams }) {
                       <p className="font-medium text-sm">{actor.name}</p>
                       <p className="text-xs text-gray-300">{actor.character}</p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -184,9 +189,6 @@ export default async function MoviePage({ params, searchParams }) {
                   className="absolute top-0 left-0 w-full h-full rounded-lg"
                   src={`https://www.youtube.com/embed/${trailer.key}`}
                   title={`${getTitle()} Trailer`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
                 ></iframe>
               </div>
             </div>

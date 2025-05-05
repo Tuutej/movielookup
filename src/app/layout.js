@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "MovieLookUp",
-  description: "A simple page to look up movies",
+  description: "A simple page to look up movies and tv shows",
 };
 
 export default function RootLayout({ children }) {
