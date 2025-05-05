@@ -5,7 +5,7 @@ import { IoIosThumbsUp } from "react-icons/io";
 import { MdStar } from "react-icons/md";
 
 export default function Card({ result }) {
-  // check if which media type is being used
+  // check which media type is being used
   const mediaType = result.media_type || (result.title ? "movie" : "tv");
 
   return (

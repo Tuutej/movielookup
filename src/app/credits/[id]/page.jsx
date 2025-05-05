@@ -30,11 +30,31 @@ export default async function ActorPage({ params }) {
     return true;
   });
 
-  // sort by rating and limit to 20
-  const knownFor =
-    filteredCredits
-      ?.sort((a, b) => b.vote_average - a.vote_average)
-      ?.slice(0, 20) || [];
+  // group credits by project ID to handle multiple roles in the same project
+  const groupedCredits = filteredCredits?.reduce((acc, credit) => {
+    const projectId = credit.id;
+    const mediaType = credit.media_type;
+    const key = `${projectId}-${mediaType}`;
+
+    if (!acc[key]) {
+      acc[key] = {
+        ...credit,
+        characters: credit.character ? [credit.character] : [],
+      };
+    } else if (
+      credit.character &&
+      !acc[key].characters.includes(credit.character)
+    ) {
+      acc[key].characters.push(credit.character);
+    }
+
+    return acc;
+  }, {});
+
+  // convert back to array, sort by rating, and limit to 20
+  const knownFor = Object.values(groupedCredits || {})
+    .sort((a, b) => b.popularity - a.popularity)
+    .slice(0, 20);
 
   // calculate age from birthday and deathday
   const calculateAge = () => {
@@ -100,7 +120,7 @@ export default async function ActorPage({ params }) {
               {knownFor.map((credit) => (
                 <Link
                   href={`/media/${credit.id}?type=${credit.media_type}`}
-                  key={`${credit.id}-${credit.media_type}-${credit.character}`}
+                  key={`${credit.id}-${credit.media_type}`}
                   className="bg-gray-800 rounded-lg overflow-hidden hover:scale-105 transition-transform"
                 >
                   {credit.poster_path ? (
@@ -125,9 +145,16 @@ export default async function ActorPage({ params }) {
                         <span className="text-gray-400 ml-1">(TV)</span>
                       )}
                     </h3>
-                    {credit.character && (
+                    {credit.characters && credit.characters.length > 0 && (
                       <p className="text-xs text-gray-400">
-                        as {credit.character}
+                        as{" "}
+                        {credit.characters.length > 1
+                          ? `${credit.characters.slice(0, 2).join(", ")}${
+                              credit.characters.length > 2
+                                ? ` +${credit.characters.length - 2} more`
+                                : ""
+                            }`
+                          : credit.characters[0]}
                       </p>
                     )}
                     <p className="text-xs text-gray-500">
